@@ -8,16 +8,31 @@
                     <div class="panel-heading">Database List</div>
                     <div class="panel-body">
                         @if($databases)
-                            <select name="database" class="form-control">
+                            <select name="database" class="form-control" id="select-database">
                                 <option>Select Database</option>
                                 @foreach($databases as $database)
                                     <option>{{ $database }}</option>
                                 @endforeach
                             </select>
+
+                            <br>
+
+                            <button class="btn btn-primary" id="btn-db-schema">Database Schema</button>
                         @endif
                     </div>
                 </div>
             </div>
         </div>
     </div>
+@endsection
+
+@section('script')
+    <script>
+    $(document).ready(function() {
+        $('#btn-db-schema').click(function () {
+            var url = "{{ url('database/schema/') }}";
+            window.location.href = url + '/' + $('#select-database').val();
+        });
+    });
+    </script>
 @endsection

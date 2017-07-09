@@ -7,3 +7,8 @@
 
 // Bootstrap
 @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+
+table.table-list caption {
+  font-weight: bold;
+  font-size: 22px;
+}
