@@ -54,12 +54,8 @@ class SchemaController extends Controller
     {
         if(!$dbName) $dbName = $this->currentDb;
 
-        // connect to selected database
         // Remaining fixing name from slug
-        $this->connectToDatabase($dbName);
-
-        // Current no database selection, just get schema for default connection
-        $tables = $this->getTables();
+        $tables = $this->getTables($dbName);
 
         return view('database-schema', compact('tables', 'dbName'));
     }
@@ -67,10 +63,15 @@ class SchemaController extends Controller
     /**
      * Return the list of tables details for the database connection.
      *
+     * @param $dbName
      * @return \Doctrine\DBAL\Schema\Table[]
      */
-    protected function getTables()
+    protected function getTables($dbName)
     {
+        if($this->currentDb != $dbName) {
+            $this->connectToDatabase($dbName);
+        }
+
         return DB::getDoctrineSchemaManager()->listTables();
     }
 
@@ -81,9 +82,29 @@ class SchemaController extends Controller
      */
     protected function connectToDatabase($dbName)
     {
-        Config::set('database.connections.mysql.database', $dbName);
-        DB::reconnect();
+        $defaultConfig = Config::get($this->getDBConfigKey());
+
+        // Set our targeted database name
+        $defaultConfig['database'] = $dbName;
+
+        // Our new config
+        Config::set($this->getDBConfigKey('docer'), $defaultConfig);
+
+        // Set our newly created config as default connection
+        DB::setDefaultConnection('docer');
         $this->registerEnums();
+    }
+
+    /**
+     * Get database connection config key
+     * @param null $connectName
+     * @return string
+     */
+    protected function getDBConfigKey($connectName = null)
+    {
+        if(!$connectName) $connectName = DB::getDefaultConnection();
+
+        return 'database.connections.' . $connectName;
     }
 
     /**
@@ -91,7 +112,8 @@ class SchemaController extends Controller
      */
     protected function registerEnums()
     {
-        $platform = DB::getDoctrineConnection()->getDatabasePlatform();
+        $platform = DB::getDoctrineSchemaManager()->getDatabasePlatform();
         $platform->registerDoctrineTypeMapping('enum', 'string');
+        $platform->registerDoctrineTypeMapping('json', 'text');
     }
 }
