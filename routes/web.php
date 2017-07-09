@@ -11,6 +11,6 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'SchemaController@getWelcomeView');
+
+Route::get('database', 'SchemaController@getDatabaseListView');
