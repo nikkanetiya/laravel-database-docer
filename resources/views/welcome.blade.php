@@ -8,7 +8,7 @@
                     <div class="panel-heading">Actions</div>
                     <div class="panel-body">
                         <div>
-                            <a href="{{ url('database-list') }}">Database List</a>
+                            <a href="{{ url('database') }}">Database List</a>
                         </div>
                     </div>
                 </div>
