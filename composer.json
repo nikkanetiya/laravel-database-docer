@@ -1,11 +1,12 @@
 {
-    "name": "laravel/laravel",
-    "description": "The Laravel Framework.",
-    "keywords": ["framework", "laravel"],
+    "name": "nikkanetiya/laravel-database-docer",
+    "description": "Export your database schema in readable and printable formats..",
+    "keywords": ["laravel", "database", "database docer", "database document"],
     "license": "MIT",
     "type": "project",
     "require": {
         "php": ">=5.6.4",
+        "doctrine/dbal": "^2.5",
         "laravel/framework": "5.4.*",
         "laravel/tinker": "~1.0"
     },
