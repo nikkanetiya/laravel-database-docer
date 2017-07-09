@@ -8,9 +8,17 @@
 // Bootstrap
 @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
 
-table.table-list caption {
+table.table-list > caption {
   font-weight: bold;
   font-size: 22px;
+}
+
+table.foreign-keys {
+  caption {
+    font-weight: bold;
+  }
+  margin-bottom: 5px;
+  background-color: inherit !important;
 }
 
 // Printing style

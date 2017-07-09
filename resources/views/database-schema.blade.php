@@ -20,6 +20,7 @@
                                         <th>Type</th>
                                         <th>Allow Null</th>
                                         <th>Key/Attributes</th>
+                                        <th>Default</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -32,8 +33,36 @@
                                             <td>{{ $column->getType()->getName() }}</td>
                                             <td>{{ $column->getNotnull() ? null : 'Nullable' }}</td>
                                             <td>{{ $primaryKeys && in_array($column->getName(), $primaryKeys) ? 'Primary' : '' }}</td>
+                                            <td>{{ $column->getDefault() }}</td>
                                         </tr>
                                     @endforeach
+                                    <?php $foreignKeys = $table->getForeignKeys();
+                                    ?>
+                                    @if($foreignKeys)
+                                        <tr>
+                                            <td colspan="5">
+                                                <table width="100%" class="table table-bordered foreign-keys">
+                                                    <caption>Foreign Keys</caption>
+                                                    <thead>
+                                                        <th>Constraint Name</th>
+                                                        <th>Local Table</th>
+                                                        <th>Local Column</th>
+                                                        <th>Foreign Table</th>
+                                                        <th>Foreign Column</th>
+                                                    </thead>
+                                                    @foreach($foreignKeys as $foreignKey)
+                                                        <tr>
+                                                            <td>{{ $foreignKey->getName() }}</td>
+                                                            <td>{{ $foreignKey->getLocalTableName() }}</td>
+                                                            <td>{{ implode(',', $foreignKey->getLocalColumns()) }}</td>
+                                                            <td>{{ $foreignKey->getForeignTableName() }}</td>
+                                                            <td>{{ implode(',', $foreignKey->getForeignColumns()) }}</td>
+                                                        </tr>
+                                                    @endforeach
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    @endif
                                 </tbody>
                             </table>
                         @endforeach
