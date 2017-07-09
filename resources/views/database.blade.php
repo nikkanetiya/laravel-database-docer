@@ -7,9 +7,14 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">Database List</div>
                     <div class="panel-body">
-                        <select name="database" class="form-control">
-                            <option>Select Database</option>
-                        </select>
+                        @if($databases)
+                            <select name="database" class="form-control">
+                                <option>Select Database</option>
+                                @foreach($databases as $database)
+                                    <option>{{ $database }}</option>
+                                @endforeach
+                            </select>
+                        @endif
                     </div>
                 </div>
             </div>

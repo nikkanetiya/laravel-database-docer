@@ -20,6 +20,8 @@ class SchemaController extends Controller
      */
     public function getDatabaseListView()
     {
-        return view('database');
+        $databases = \DB::getDoctrineSchemaManager()->listDatabases();
+
+        return view('database', compact('databases'));
     }
 }
