@@ -8,6 +8,21 @@ use Config;
 class SchemaController extends Controller
 {
     /**
+     * Default Connected DB
+     * @var string $currentDb
+     */
+    protected $currentDb;
+
+    /**
+     * SchemaController constructor.
+     * @param null $currentDb
+     */
+    public function __construct($currentDb = null)
+    {
+        $this->currentDb = DB::getDoctrineConnection()->getDatabase();
+    }
+
+    /**
      * Get basic welcome view with having link for all actions.
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -25,7 +40,8 @@ class SchemaController extends Controller
     {
         $databases = \DB::getDoctrineSchemaManager()->listDatabases();
 
-        return view('database', compact('databases'));
+        return view('database', compact('databases'))
+            ->with('currentDb', $this->currentDb);
     }
 
     /**
@@ -34,8 +50,10 @@ class SchemaController extends Controller
      * @param string $dbName
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function getDatabaseSchemaView($dbName)
+    public function getDatabaseSchemaView($dbName = null)
     {
+        if(!$dbName) $dbName = $this->currentDb;
+
         // connect to selected database
         // Remaining fixing name from slug
         $this->connectToDatabase($dbName);

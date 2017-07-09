@@ -14,4 +14,4 @@
 Route::get('/', 'SchemaController@getWelcomeView');
 
 Route::get('database', 'SchemaController@getDatabaseListView');
-Route::get('database/schema/{db}', 'SchemaController@getDatabaseSchemaView');
+Route::get('database/schema/{dbName?}', 'SchemaController@getDatabaseSchemaView');

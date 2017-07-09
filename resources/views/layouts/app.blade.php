@@ -48,7 +48,8 @@
 
                 <!-- Right Side Of Navbar -->
                 <ul class="nav navbar-nav navbar-right">
-                    <!-- Nothing for now -->
+                    <li><a href="{{ url('database') }}">Databases</a></li>
+                    <li><a href="{{ url('database/schema') }}">Schema</a></li>
                 </ul>
             </div>
         </div>

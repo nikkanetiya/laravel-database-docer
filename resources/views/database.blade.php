@@ -9,9 +9,9 @@
                     <div class="panel-body">
                         @if($databases)
                             <select name="database" class="form-control" id="select-database">
-                                <option>Select Database</option>
+                                <option value="">Select Database</option>
                                 @foreach($databases as $database)
-                                    <option>{{ $database }}</option>
+                                    <option {{ $currentDb == $database ? 'selected' : '' }}>{{ $database }}</option>
                                 @endforeach
                             </select>
 
@@ -31,7 +31,9 @@
     $(document).ready(function() {
         $('#btn-db-schema').click(function () {
             var url = "{{ url('database/schema/') }}";
-            window.location.href = url + '/' + $('#select-database').val();
+            var selectedDb = $('#select-database').val();
+
+            if(selectedDb) window.location.href = url + '/' + $('#select-database').val();
         });
     });
     </script>
