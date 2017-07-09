@@ -19,7 +19,7 @@ class SchemaController extends Controller
      */
     public function __construct($currentDb = null)
     {
-        $this->currentDb = DB::getDoctrineConnection()->getDatabase();
+        $this->currentDb = DB::getDatabaseName();
     }
 
     /**
