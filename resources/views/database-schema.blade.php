@@ -5,7 +5,11 @@
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Database Schema : <strong>{{ $dbName }}</strong></div>
+                    <div class="panel-heading">
+                        <span class="list-inline">Database Schema : <strong>{{ $dbName }}</strong></span>
+
+                        <button class="btn hidden-print" onclick="window.print()">Print</button>
+                    </div>
                     <div class="panel-body">
                         @foreach($tables as $table)
                             <table class="table table-bordered table-list">
