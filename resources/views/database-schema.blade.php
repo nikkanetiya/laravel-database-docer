@@ -30,7 +30,7 @@
                                     @foreach($table->getColumns() as $column)
                                         <tr>
                                             <td>{{ $column->getName() }}</td>
-                                            <td>{{ $column->getType()->getName() }}</td>
+                                            <td>{{ $column->getType()->getName() . ($column->getLength() ? "({$column->getLength()})" :'') }}</td>
                                             <td>{{ $column->getNotnull() ? null : 'Nullable' }}</td>
                                             <td>{{ $primaryKeys && in_array($column->getName(), $primaryKeys) ? 'Primary' : '' }}</td>
                                             <td>{{ $column->getDefault() }}</td>
