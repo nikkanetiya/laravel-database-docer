@@ -65,5 +65,15 @@ class SchemaController extends Controller
     {
         Config::set('database.connections.mysql.database', $dbName);
         DB::reconnect();
+        $this->registerEnums();
+    }
+
+    /**
+     * Register enum types as string.
+     */
+    protected function registerEnums()
+    {
+        $platform = DB::getDoctrineConnection()->getDatabasePlatform();
+        $platform->registerDoctrineTypeMapping('enum', 'string');
     }
 }
