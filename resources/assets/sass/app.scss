@@ -12,3 +12,9 @@ table.table-list caption {
   font-weight: bold;
   font-size: 22px;
 }
+
+// Printing style
+@media print
+{
+  .panel-default {border: none};
+}
