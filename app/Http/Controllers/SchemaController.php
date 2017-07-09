@@ -29,11 +29,16 @@ class SchemaController extends Controller
      * Get View showing list of available database
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function getDatabaseSchemaView()
+    public function getDatabaseSchemaView($db)
     {
+        // connect to selected database
+        // Remaining fixing name from slug
+        \Config::set('database.connections.mysql.database', $db);
+        \DB::reconnect();
+
         // Current no database selection, just get schema for default connection
         $tables = \DB::getDoctrineSchemaManager()->listTables();
 
-        return view('database-schema', compact('tables'));
+        return view('database-schema', compact('tables', 'db'));
     }
 }
