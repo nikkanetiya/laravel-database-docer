@@ -43,7 +43,7 @@ class SchemaController extends Controller
         // Current no database selection, just get schema for default connection
         $tables = $this->getTables();
 
-        return view('database-schema', compact('tables', 'db'));
+        return view('database-schema', compact('tables', 'dbName'));
     }
 
     /**
