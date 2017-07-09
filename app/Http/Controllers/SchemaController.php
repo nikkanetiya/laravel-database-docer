@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use DB;
+use Config;
+
 class SchemaController extends Controller
 {
     /**
@@ -27,18 +30,40 @@ class SchemaController extends Controller
 
     /**
      * Get View showing list of available database
+     *
+     * @param string $dbName
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function getDatabaseSchemaView($db)
+    public function getDatabaseSchemaView($dbName)
     {
         // connect to selected database
         // Remaining fixing name from slug
-        \Config::set('database.connections.mysql.database', $db);
-        \DB::reconnect();
+        $this->connectToDatabase($dbName);
 
         // Current no database selection, just get schema for default connection
-        $tables = \DB::getDoctrineSchemaManager()->listTables();
+        $tables = $this->getTables();
 
         return view('database-schema', compact('tables', 'db'));
+    }
+
+    /**
+     * Return the list of tables details for the database connection.
+     *
+     * @return \Doctrine\DBAL\Schema\Table[]
+     */
+    protected function getTables()
+    {
+        return DB::getDoctrineSchemaManager()->listTables();
+    }
+
+    /**
+     * Change mysql connection and connect to other database
+     *
+     * @param string $dbName
+     */
+    protected function connectToDatabase($dbName)
+    {
+        Config::set('database.connections.mysql.database', $dbName);
+        DB::reconnect();
     }
 }
