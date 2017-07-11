@@ -6,15 +6,25 @@
             <div class="col-md-8 col-md-offset-2">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <span class="list-inline">Database Schema : <strong>@{{ dbName }}</strong></span>
+                        <div>
+                            <span>Database Schema : <strong>@{{ dbName }}</strong></span>
 
-                        <button class="btn hidden-print" onclick="window.print()">Print</button>
+                            <label class="radio-inline hidden-print">
+                                <input type="radio" value="1" v-model="dataOption" checked>All
+                            </label>
+                            <label class="radio-inline hidden-print">
+                                <input type="radio" value="2" v-model="dataOption">Without Foreign Key
+                            </label>
+                            <label class="radio-inline hidden-print">
+                                <input type="radio" value="3" v-model="dataOption">Only Foreign Key
+                            </label>
 
-                        <button class="btn hidden-print" v-if="!showForeignKey" @click="showForeignKey = true">Show Foreign Key</button>
-                        <button class="btn hidden-print" v-if="showForeignKey" @click="showForeignKey = false">Hide Foreign Key</button>
+                            <button class="btn hidden-print" onclick="window.print()">Print</button>
+                        </div>
                     </div>
+
                     <div class="panel-body">
-                        <schema-view v-bind:db-schema="dbSchema" v-bind:show-foreign-key="showForeignKey"></schema-view>
+                        <schema-view v-bind:db-tables="dbSchema.tables" v-bind:data-option="dataOption"></schema-view>
                     </div>
                 </div>
             </div>
@@ -27,7 +37,7 @@
         const app = new Vue({
             el: '#app',
             data: {
-                showForeignKey: true,
+                dataOption: 1,
                 dbName: "{{ $dbSchema->getName() }}",
                 dbSchema: {!! json_encode($dbSchema->toArray()) !!}
             }
