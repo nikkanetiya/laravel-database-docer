@@ -18,17 +18,17 @@
                                     <th>Name</th>
                                     <th>Type</th>
                                     <th>Allow Null</th>
-                                    <th>Key/Attributes</th>
-                                    <th>Default</th>
+                                    <th>Key</th>
+                                    <th>Default/Attribute</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr v-for="column in table.columns" v-if="table.columns">
                                     <td>@{{ column.name }}</td>
-                                    <td>@{{ column.type }}</td>
+                                    <td>@{{ column.type }} <span v-if="column.length">(@{{ column.length }})</span></td>
                                     <td>@{{ column.notnull ? '' : 'Nullable' }}</td>
                                     <td>@{{ column.isPrimaryKey ? 'PK' : '' }} @{{ column.isForeignKey ? ' FK' : '' }}</td>
-                                    <td>@{{ column.autoincrement ? 'Auto Increment' : '' }}</td>
+                                    <td>@{{ column.default ? column.default : '' }} @{{ column.autoincrement ? 'Auto Increment' : '' }}</td>
                                 </tr>
                                 <tr v-if="table.foreignKeys">
                                     <td colspan="5">
