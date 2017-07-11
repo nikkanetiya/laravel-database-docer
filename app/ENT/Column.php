@@ -157,6 +157,7 @@ class Column
         }
 
         return [
+            'constraint_name' => $this->foreignKey->getName(),
             'local_table' => $this->foreignKey->getLocalTableName(),
             'local_columns' => $this->foreignKey->getLocalColumns(),
             'foreign_table' => $this->foreignKey->getForeignTableName(),
