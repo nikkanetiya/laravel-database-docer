@@ -9,13 +9,6 @@ namespace App\ENT;
 class Column
 {
     /**
-     * Tale
-     *
-     * @var Table
-     */
-    public $table;
-
-    /**
      * Column Name
      *
      * @var string
@@ -116,7 +109,7 @@ class Column
     /**
      * ForeignKeyConstraint
      *
-     * @var ForeignKeyConstraint|null
+     * @var \Doctrine\DBAL\Schema\ForeignKeyConstraint|null
      */
     public $foreignKey = null;
 
@@ -152,7 +145,22 @@ class Column
     {
         $obj = get_object_vars($this);
         $obj['type'] = $obj['type']->getName();
+        $obj['foreignKey'] = $this->foreignKeyToArray();
 
         return $obj;
+    }
+
+    protected function foreignKeyToArray()
+    {
+        if(!$this->foreignKey) {
+            return null;
+        }
+
+        return [
+            'local_table' => $this->foreignKey->getLocalTableName(),
+            'local_columns' => $this->foreignKey->getLocalColumns(),
+            'foreign_table' => $this->foreignKey->getForeignTableName(),
+            'foreign_columns' => $this->foreignKey->getForeignColumns()
+        ];
     }
 }

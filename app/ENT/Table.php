@@ -133,7 +133,9 @@ class Table
     {
         return [
             'name' => $this->name,
-            'columns' => $this->columns->toArray()
+            'columns' => array_map(function ($column) {
+                return $column->toArray();
+            }, $this->columns->toArray())
         ];
     }
 }

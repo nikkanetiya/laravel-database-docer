@@ -106,7 +106,7 @@ class Database
      *
      * @return array
      */
-    public function getTablesData()
+    public function getTables()
     {
         if(!$this->tables) $this->fillTablesData();
 
