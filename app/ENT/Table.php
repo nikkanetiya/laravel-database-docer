@@ -133,9 +133,23 @@ class Table
     {
         return [
             'name' => $this->name,
+            'foreignKeys' => $this->foreignKeys ? array_map(function ($key) {
+                return $this->foreignKeyToArray($key);
+            }, $this->foreignKeys) : null,
             'columns' => array_map(function ($column) {
                 return $column->toArray();
             }, $this->columns->toArray())
+        ];
+    }
+
+    protected function foreignKeyToArray($foreignKey)
+    {
+        return [
+            'constraint_name' => $foreignKey->getName(),
+            'local_table' => $foreignKey->getLocalTableName(),
+            'local_columns' => $foreignKey->getLocalColumns(),
+            'foreign_table' => $foreignKey->getForeignTableName(),
+            'foreign_columns' => $foreignKey->getForeignColumns()
         ];
     }
 }
