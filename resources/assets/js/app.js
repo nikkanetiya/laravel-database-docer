@@ -15,7 +15,17 @@ window.Vue = require('vue');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-//Vue.component('example', require('./components/Example.vue'));
+Vue.component('schema-view', require('./components/dbSchema.vue'));
+
+Vue.filter('implode', function (value, piece, key) {
+    piece = piece ? piece : ', ';
+
+    if(_.isUndefined(key)) {
+        return value.join(piece);
+    }
+
+    return _.pluck(value, key).join(piece);
+});
 
 // const app = new Vue({
 //     el: '#app'

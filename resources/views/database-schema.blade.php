@@ -1,62 +1,20 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container" id="app">
+    <div class="container">
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <span class="list-inline">Database Schema : <strong>@{{ name }}</strong></span>
+                        <span class="list-inline">Database Schema : <strong>@{{ dbName }}</strong></span>
 
                         <button class="btn hidden-print" onclick="window.print()">Print</button>
+
+                        <button class="btn hidden-print" v-if="!showForeignKey" @click="showForeignKey = true">Show Foreign Key</button>
+                        <button class="btn hidden-print" v-if="showForeignKey" @click="showForeignKey = false">Hide Foreign Key</button>
                     </div>
                     <div class="panel-body">
-                        <table v-for="table in tables" v-if="tables" class="table table-bordered table-list">
-                            <caption>@{{ table.name }}</caption>
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Type</th>
-                                    <th>Allow Null</th>
-                                    <th>Key</th>
-                                    <th>Default/Attribute</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-for="column in table.columns" v-if="table.columns">
-                                    <td>@{{ column.name }}</td>
-                                    <td>@{{ column.type }} <span v-if="column.length">(@{{ column.length }})</span></td>
-                                    <td>@{{ column.notnull ? '' : 'Nullable' }}</td>
-                                    <td>@{{ column.isPrimaryKey ? 'PK' : '' }} @{{ column.isForeignKey ? ' FK' : '' }}</td>
-                                    <td>@{{ column.default ? column.default : '' }} @{{ column.autoincrement ? 'Auto Increment' : '' }}</td>
-                                </tr>
-                                <tr v-if="table.foreignKeys">
-                                    <td colspan="5">
-                                        <table width="100%" class="table table-bordered foreign-keys">
-                                            <caption>Foreign Keys</caption>
-                                            <thead>
-                                                <tr>
-                                                    <th>Constraint Name</th>
-                                                    <th>Local Table</th>
-                                                    <th>Local Column</th>
-                                                    <th>Foreign Table</th>
-                                                    <th>Foreign Column</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr v-for="foreignKey in table.foreignKeys">
-                                                    <td>@{{ foreignKey.constraint_name }}</td>
-                                                    <td>@{{ foreignKey.local_table }}</td>
-                                                    <td>@{{ foreignKey.local_columns | implode }}</td>
-                                                    <td>@{{ foreignKey.foreign_table }}</td>
-                                                    <td>@{{ foreignKey.foreign_columns | implode }}</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <schema-view v-bind:db-schema="dbSchema" v-bind:show-foreign-key="showForeignKey"></schema-view>
                     </div>
                 </div>
             </div>
@@ -66,19 +24,14 @@
 
 @section('script')
     <script>
-        Vue.filter('implode', function (value, piece, key) {
-            piece = piece ? piece : ', ';
-
-            if(_.isUndefined(key)) {
-                return value.join(piece);
-            }
-
-            return _.pluck(value, key).join(piece);
-        });
-
         const app = new Vue({
             el: '#app',
-            data: {!! json_encode($dbSchema->toArray()) !!}
+            data: {
+                showForeignKey: true,
+                dbName: "{{ $dbSchema->getName() }}",
+                dbSchema: {!! json_encode($dbSchema->toArray()) !!}
+            }
         });
+
     </script>
 @endsection
