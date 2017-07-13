@@ -3,11 +3,13 @@
 namespace App\ENT;
 
 use DB;
+use Doctrine\DBAL\Schema\AbstractSchemaManager;
+use Doctrine\DBAL\Schema\ForeignKeyConstraint;
 
 /**
  * Class Table
  *
- * @package App\Database
+ * @package App\ENT
  */
 class Table
 {
@@ -41,7 +43,7 @@ class Table
 
     /**
      * Table constructor
-     * .
+     *
      * @param string $tableName
      */
     public function __construct($tableName)
@@ -64,18 +66,22 @@ class Table
         $tableDetail = $this->getDoctrineSchemaManager()->listTableDetails($this->name);
 
         $this->foreignKeys = $tableDetail->getForeignKeys();
-        $this->primaryKeys = $tableDetail->hasPrimaryKey() ? $tableDetail->getPrimaryKeyColumns() : null;
+        $this->primaryKeys = $tableDetail->hasPrimaryKey() ?
+            $tableDetail->getPrimaryKeyColumns() : null;
         $this->fillColumns($tableDetail->getColumns());
     }
 
     /**
      * Fill Columns data
      *
+     * @param string|null $columns
      * @return array
      */
     protected function fillColumns($columns = null)
     {
-        if(!$columns) $this->getDoctrineSchemaManager()->listTableColumns($this->name);
+        if( ! $columns) {
+            $this->getDoctrineSchemaManager()->listTableColumns($this->name);
+        }
 
         $this->columns = collect(array_map(function($column) {
             return new Column($column->toArray());
@@ -117,7 +123,7 @@ class Table
     /**
      * Get Default Doctrine Schema Manager
      *
-     * @return \Doctrine\DBAL\Schema\AbstractSchemaManager
+     * @return AbstractSchemaManager
      */
     protected function getDoctrineSchemaManager()
     {
@@ -142,6 +148,10 @@ class Table
         ];
     }
 
+    /**
+     * @param ForeignKeyConstraint $foreignKey
+     * @return array
+     */
     protected function foreignKeyToArray($foreignKey)
     {
         return [

@@ -2,13 +2,13 @@
 
 namespace App\ENT;
 
-use App\ENT\Table;
 use DB;
 use Config;
+use Doctrine\DBAL\Schema\AbstractSchemaManager;
 
 /**
  * Class Database
- * @package App\Database
+ * @package App\ENT
  */
 class Database
 {
@@ -28,6 +28,7 @@ class Database
 
     /**
      * Database constructor.
+     *
      * @param string|null $dbName
      */
     public function __construct($dbName = null)
@@ -59,12 +60,15 @@ class Database
 
     /**
      * Get database connection config key
-     * @param null $connectName
+     *
+     * @param string|null $connectName
      * @return string
      */
     protected function getDBConfigKey($connectName = null)
     {
-        if(!$connectName) $connectName = DB::getDefaultConnection();
+        if( ! $connectName) {
+            $connectName = DB::getDefaultConnection();
+        }
 
         return 'database.connections.' . $connectName;
     }
@@ -108,7 +112,9 @@ class Database
      */
     public function getTables()
     {
-        if(!$this->tables) $this->fillTablesData();
+        if( ! $this->tables) {
+            $this->fillTablesData();
+        }
 
         return $this->tables;
     }
@@ -138,7 +144,7 @@ class Database
     /**
      * Get Default Doctrine Schema Manager
      *
-     * @return \Doctrine\DBAL\Schema\AbstractSchemaManager
+     * @return AbstractSchemaManager
      */
     protected function getDoctrineSchemaManager()
     {
@@ -152,11 +158,11 @@ class Database
      */
     public function toArray()
     {
-        $obj = get_object_vars($this);
-        $obj['tables'] = array_map(function($table) {
-            return $table->toArray();
-        }, $this->tables->toArray());
-
-        return $obj;
+        return array_merge(
+            get_object_vars($this),
+            ['tables' => array_map(function($table) {
+                return $table->toArray();
+            }, $this->tables->toArray())]
+        );
     }
 }

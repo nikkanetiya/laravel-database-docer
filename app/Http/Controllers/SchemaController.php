@@ -18,20 +18,21 @@ class SchemaController extends Controller
 
     /**
      * Get View showing list of available database
+     *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function getDatabaseListView()
     {
         $databases = \DB::getDoctrineSchemaManager()->listDatabases();
+        $currentDb = \DB::getDatabaseName();
 
-        return view('database', compact('databases'))
-            ->with('currentDb', \DB::getDatabaseName());
+        return view('database', compact('databases', 'currentDb'));
     }
 
     /**
      * Get View showing list of available database
      *
-     * @param string $dbName
+     * @param string|null $dbName
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function getDatabaseSchemaView($dbName = null)
