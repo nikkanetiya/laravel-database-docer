@@ -2,9 +2,12 @@
 
 namespace App\ENT;
 
+use Doctrine\DBAL\Schema\ForeignKeyConstraint;
+use Doctrine\DBAL\Types\Type;
+
 /**
  * Class Column
- * @package App\Database
+ * @package App\ENT
  */
 class Column
 {
@@ -18,7 +21,7 @@ class Column
     /**
      * Column type
      *
-     * @var \Doctrine\DBAL\Types\Type
+     * @var Type
      */
     public $type;
 
@@ -109,13 +112,13 @@ class Column
     /**
      * ForeignKeyConstraint
      *
-     * @var \Doctrine\DBAL\Schema\ForeignKeyConstraint|null
+     * @var ForeignKeyConstraint|null
      */
     public $foreignKey = null;
 
     /**
      * Column constructor
-     * .
+     *
      * @param array $attributes
      */
     public function __construct(array $attributes)
@@ -128,9 +131,9 @@ class Column
     /**
      * Set ForeignKey for the column
      *
-     * @param $value
+     * @param ForeignKeyConstraint $value
      */
-    public function setForeignKey(\Doctrine\DBAL\Schema\ForeignKeyConstraint $value)
+    public function setForeignKey(ForeignKeyConstraint $value)
     {
         $this->foreignKey = $value;
         $this->isForeignKey = true;
@@ -150,9 +153,12 @@ class Column
         return $obj;
     }
 
+    /**
+     * @return array|null
+     */
     protected function foreignKeyToArray()
     {
-        if(!$this->foreignKey) {
+        if( ! $this->foreignKey) {
             return null;
         }
 
