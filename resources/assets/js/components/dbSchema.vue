@@ -2,7 +2,7 @@
     <div>
         <table v-for="table in filterTables" v-if="filterTables" class="table table-bordered table-list">
             <caption>{{ table.name }}</caption>
-            <thead v-if="!isOnlyForeignKey">
+            <thead v-if=" ! isOnlyForeignKey">
                 <tr>
                     <th>Name</th>
                     <th>Type</th>
@@ -12,7 +12,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="column in table.columns" v-if="!isOnlyForeignKey && table.columns">
+                <tr v-for="column in table.columns" v-if=" ! isOnlyForeignKey && table.columns">
                     <td>{{ column.name }}</td>
                     <td>{{ column.type }} <span v-if="column.length">({{ column.length }})</span></td>
                     <td>{{ column.notnull ? '' : 'Nullable' }}</td>
@@ -53,16 +53,15 @@
     export default {
         props: ['dbTables', 'dataOption'],
         computed: {
-            filterTables: function() {
-                var that = this;
-                return this.dbTables.filter(function (table) {
-                    return that.dataOption != 3 || table.foreignKeys;
-                })
+            filterTables() {
+                return this.dbTables.filter((table) => {
+                    return this.dataOption != 3 || table.foreignKeys;
+                });
             },
-            isOnlyForeignKey: function() {
+            isOnlyForeignKey() {
                 return this.dataOption == 3;
             },
-            showForeignKey: function() {
+            showForeignKey() {
                 return this.dataOption != 2;
             }
         }
