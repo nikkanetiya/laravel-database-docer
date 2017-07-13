@@ -11,7 +11,7 @@
                             <select name="database" class="form-control" id="select-database">
                                 <option value="">Select Database</option>
                                 @foreach($databases as $database)
-                                    <option {{ $currentDb == $database ? 'selected' : '' }}>{{ $database }}</option>
+                                    <option {{ $currentDb == $database ? 'selected' : '' }} value="{{ url('database/schema', $database) }}">{{ $database }}</option>
                                 @endforeach
                             </select>
 
@@ -28,13 +28,13 @@
 
 @section('script')
     <script>
-    $(document).ready(function() {
-        $('#btn-db-schema').click(function () {
-            var url = "{{ url('database/schema/') }}";
-            var selectedDb = $('#select-database').val();
-
-            if(selectedDb) window.location.href = url + '/' + $('#select-database').val();
+        $(document).ready(function() {
+            $('#btn-db-schema').click(function () {
+                let selectedDb = $('#select-database').val();
+                if  (selectedDb) {
+                    window.location.href = selectedDb;
+                }
+            });
         });
-    });
     </script>
 @endsection
